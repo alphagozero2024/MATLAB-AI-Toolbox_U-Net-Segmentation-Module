@@ -1,0 +1,109 @@
+# Configuration file for U-Net SAR Segmentation
+# Adjust these parameters to control model architecture and training
+
+# ============================================================
+# MODEL ARCHITECTURE PARAMETERS (Tunable)
+# ============================================================
+
+# Number of input channels (1 for grayscale SAR, 3 for RGB)
+in_channels: 1
+
+# Number of output segmentation classes
+# For SARDet-100K: 7 classes (background + 6 object categories)
+# Categories: background, ship, aircraft, car, tank, bridge, harbor
+num_classes: 7
+
+# Network depth (number of encoder/decoder levels)
+# Typical range: 3-5
+# Higher depth: more abstraction but more memory
+depth: 4
+
+# Initial number of feature channels
+# Channels double at each encoder level
+# Typical range: 32-128
+initial_channels: 64
+
+# Use batch normalization
+# Helps with training stability
+use_batchnorm: true
+
+# ============================================================
+# TRAINING PARAMETERS
+# ============================================================
+
+# Number of training epochs
+num_epochs: 50
+
+# Batch size (adjust based on memory)
+# Smaller batch = less memory but noisier gradients
+batch_size: 4
+
+# Learning rate for optimizer
+learning_rate: 0.01
+
+# Loss function: 'dice', 'cross_entropy', or 'combined'
+# - dice: Good for class imbalance, focuses on overlap
+# - cross_entropy: Standard classification loss
+# - combined: Weighted combination of both (recommended)
+loss_function: combined
+
+# ============================================================
+# DATA PARAMETERS
+# ============================================================
+
+# Image size (height, width)
+# All images will be resized to this size
+image_size: [128, 128]
+
+# Train/validation split ratio
+train_ratio: 0.8
+
+# Apply data augmentation during training
+augment: false
+
+# Normalize images to [0, 1]
+normalize: false
+
+# ============================================================
+# PATHS
+# ============================================================
+
+# Directory containing training data
+data_dir: "D:/SARDet_100K"
+
+# Directory to save model checkpoints
+checkpoint_dir: ./checkpoints
+
+# Directory to save ONNX models (for MATLAB)
+# Standardized path (no spaces) to avoid ambiguity between scripts
+onnx_output_dir: ../Test_models/saved_models
+
+# ============================================================
+# SYNTHETIC DATA (for testing)
+# ============================================================
+
+# Use synthetic data if real data not available
+# Set to false when using real datasets like SARDet-100K
+use_synthetic_data: false
+
+# Number of synthetic samples to generate
+num_synthetic_samples: 100
+
+# ============================================================
+# ADVANCED OPTIONS
+# ============================================================
+
+# CUDA/GPU acceleration (requires CuPy installation)
+# - null: Auto-detect (use GPU if CuPy is available, otherwise CPU)
+# - true: Force GPU (will fail if CuPy not available)
+# - false: Force CPU (even if CuPy is available)
+use_cuda: null
+
+# Save checkpoint every N epochs
+save_frequency: 10
+
+# Early stopping patience (not implemented yet)
+early_stopping_patience: 10
+
+# Use class weighting for imbalanced datasets
+use_class_weights: false
